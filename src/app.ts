@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes";
 import sequelize from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
@@ -18,6 +19,14 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(limiter);
+
+app.use(
+	cors({
+		origin: "*", // For now added '*' replace it with specific origin for production
+		methods: ["GET", "POST"],
+		allowedHeaders: ["Content-Type", "Authorization"],
+	})
+);
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
